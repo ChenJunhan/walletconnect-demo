@@ -61,10 +61,12 @@ export async function signMessage(message) {
   }
 
   const signer = web3Provider.getSigner();
+  // 发起消息签名
   return signer.signMessage(message);
 }
 
 export function recoverSignerAddress(message, signature) {
+  // 验证签名恢复地址
   return ethers.utils.verifyMessage(message, signature);
 }
 

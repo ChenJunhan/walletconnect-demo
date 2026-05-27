@@ -141,7 +141,7 @@ export default {
         };
       }
 
-      const recovered = this.normalizeAddress(recoverSignerAddress(message, signature));
+      const recovered = this.normalizeAddress(recoverSignerAddress(message, signature)); //验签预检查
       return {
         ok: recovered === inputAddress,
         recoveredAddress: recovered
@@ -218,6 +218,7 @@ export default {
         }
 
         const { address, chainId } = await connectWalletConnect();
+        console.log(111, address)
         this.connectedAddress = this.normalizeAddress(address);
         this.chainId = chainId;
       } catch (err) {
@@ -233,16 +234,16 @@ export default {
       try {
         const normalizedInput = this.normalizeAddress(this.inputAddress);
         this.inputAddress = normalizedInput;
-
+        console.log('122', this.inputAddress)
         const message = await this.requestChallenge(normalizedInput);
         const signature = await this.signByChain(message, normalizedInput);
-        const localResult = this.verifyLocally(message, signature, normalizedInput);
+        const localResult = this.verifyLocally(message, signature, normalizedInput); // 验签预检查
 
         this.message = message;
         this.signature = signature;
         this.recoveredAddress = localResult.recoveredAddress;
         this.verified = localResult.ok;
-
+        console.log('签名', this.signature)
         if (!this.verified) {
           this.error = "验证失败：当前扫码钱包并不控制你输入的地址。";
           return;
